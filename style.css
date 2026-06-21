@@ -18,123 +18,167 @@ body {
     padding: 5px;
 }
 
-/* কার্ড স্টাইল */
+/* 🔒 লগইন স্ক্রিন ডিজাইন ফিক্স */
+.auth-card {
+    max-width: 360px;
+    margin: 80px auto;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    border: 1px solid #e2e8f0;
+}
+
+.auth-card h2 {
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    color: #1e293b;
+    border: none;
+    padding: 0;
+}
+
+.auth-card select, 
+.auth-card input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+}
+
+.auth-card button {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+/* কার্ড লেআউট */
 .card {
     background: #ffffff;
-    padding: 20px;
-    margin-bottom: 24px;
+    padding: 16px;
+    margin-bottom: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     border: 1px solid #e2e8f0;
 }
 
 h2 {
-    font-size: 1.3rem;
-    margin-bottom: 16px;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
     color: #1e293b;
-    font-weight: 700;
     border-bottom: 2px solid #f1f5f9;
-    padding-bottom: 8px;
+    padding-bottom: 6px;
 }
 
-/* ড্যাশবোর্ড গ্রিড */
+/* সামারি এবং ডিপোজিট গ্রিড লেআউট (📱 মোবাইলের জন্য ফুল রেসপনসিভ) */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
-    margin-top: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 10px;
 }
 
-/* 📱 মোবাইল স্ক্রোল কন্টেইনার ফিক্স */
+/* 🎯 ডিপোজিট ইনপুট সেকশন মোবাইল ফ্রেন্ডলি ফিক্স */
+/* যদি তোদের HTML এ ডিপোজিটের ইনপুটগুলো কোনো ডিভ বা পি-ট্যাগের ভেতর থাকে, তবে এটা সেগুলোকে সুন্দর বক্সে রূপান্তর করবে */
+.card p input[type="number"],
+div input[id^="dep-"] {
+    width: 100% !important; /* মোবাইলে ফুল স্ক্রিন চওড়া হবে */
+    max-width: 100% !important;
+    height: 42px !important;
+    margin: 8px 0 16px 0 !important;
+    padding: 10px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    text-align: left !important; /* লেখার সুবিধার জন্য লেফট অ্যালাইন */
+    display: block !important;
+}
+
+/* 📱 মোবাইল টেবিল কন্টেইনার স্ক্রোল লজিক */
 .scrollable-table {
     width: 100%;
     overflow-x: auto;
     display: block;
+    -webkit-overflow-scrolling: touch;
     border-radius: 8px;
     border: 1px solid #e2e8f0;
 }
 
-/* 🎯 প্রিমিয়াম টেবিল ডিজাইন */
+/* 🎯 টেবিল সাইজ লক */
 table {
     width: 100%;
-    min-width: 780px; /* টেবিল যেন চাপ খেয়ে চ্যাপ্টা না হয়, মিনিমাম চওড়া ফিক্সড */
+    min-width: 850px; 
     border-collapse: collapse;
 }
 
 th, td {
     padding: 12px 8px;
     text-align: center;
-    border-bottom: 1px solid #e2e8f0;
-    border-right: 1px solid #f1f5f9;
+    border: 1px solid #e2e8f0;
     font-size: 14px;
     vertical-align: middle;
 }
 
 th {
-    background-color: #f1f5f9;
-    color: #334155;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 13px;
-    letter-spacing: 0.5px;
-}
-
-/* 📥 ইনপুট বক্স প্রিমিয়াম ডিজাইন (আর চ্যাপ্টা হবে না) */
-input[type="number"] {
-    width: 90px; /* বক্সের সাইজ স্থায়ীভাবে বড় করা হলো */
-    height: 40px; /* হাইট বাড়িয়ে দেখতে সুন্দর করা হলো */
-    padding: 8px;
-    border: 1.5px solid #cbd5e1;
-    border-radius: 6px;
-    text-align: center;
-    font-size: 14px;
+    background-color: #f8fafc;
+    color: #475569;
     font-weight: 600;
-    color: #334155;
-    transition: all 0.2s ease;
-    background-color: #ffffff;
 }
 
-/* ইনপুট বক্সে ক্লিক করলে গ্লো ইফেক্ট */
-input[type="number"]:focus, textarea:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+/* 📥 টেবিলের ভেতরের মিল/বাজার ইনপুট ফিল্ড সাইজ */
+table input[type="number"] {
+    width: 85px !important; 
+    height: 38px !important;
+    padding: 6px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    text-align: center !important;
+    font-size: 14px !important;
+    outline: none !important;
+    display: inline-block !important;
 }
 
-/* 📝 বিবরণ (Description) বক্স ডিজাইন */
-textarea {
-    width: 100%;
-    min-width: 220px;
-    height: 65px;
-    resize: none;
-    font-family: inherit;
-    padding: 8px;
-    border: 1.5px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 13px;
-    color: #334155;
-    box-sizing: border-box;
-    display: block;
-    transition: all 0.2s ease;
+/* 📝 টেবিলের ভেতরের বিবরণ বক্স */
+table textarea {
+    width: 100% !important;
+    min-width: 250px !important; 
+    height: 60px !important;
+    resize: none !important;
+    font-family: inherit !important;
+    padding: 8px !important;
+    border: 1.5px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    outline: none !important;
 }
 
 /* অ্যাক্টিভিটি লগ */
 .log-box {
-    max-height: 220px;
+    max-height: 200px;
     overflow-y: auto;
     background: #f8fafc;
-    padding: 12px;
-    border-radius: 8px;
+    padding: 10px;
+    border-radius: 6px;
     font-size: 13px;
-    border: 1px solid #e2e8f0;
 }
 
 .log-item {
-    padding: 8px 0;
+    padding: 6px 0;
     border-bottom: 1px solid #e2e8f0;
 }
 
-/* বাটন স্টাইল */
 .logout-btn {
     background: #ef4444;
     color: white;
@@ -142,7 +186,6 @@ textarea {
     padding: 6px 12px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 13px;
     font-weight: 600;
 }
 
@@ -150,7 +193,7 @@ textarea {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
 }

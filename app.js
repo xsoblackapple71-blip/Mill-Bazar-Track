@@ -5,6 +5,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyDs15CnfkHUT9W9H_Th4qHZgijzQtIUICQ",
   authDomain: "mill-and-bazar-track.firebaseapp.com",
   projectId: "mill-and-bazar-track",
+  projectNumber: "780292214339",
   storageBucket: "mill-and-bazar-track.firebasestorage.app",
   messagingSenderId: "780292214339",
   appId: "1:780292214339:web:4d4ca017df035393db4ef6",
@@ -22,7 +23,6 @@ const USER_PASSWORDS = {
 
 let currentUser = "";
 
-// বাটন ইভেন্ট লিসেনার
 document.getElementById('login-btn').addEventListener('click', () => {
     const user = document.getElementById('login-user').value;
     const pass = document.getElementById('login-pass').value;
@@ -57,13 +57,13 @@ function initTracker() {
             row.style.border = "2px solid #fbc02d";
         }
 
-        // 🎯 এখানে placeholder থেকে নাম মুছে শুধু '0' করা হলো, যাতে বক্স চ্যাপ্টা না হয়
+        // 🎯 এখানে placeholder-এ "0" এর বদলে নামের প্রথম অক্ষর (S, T, I) আর বাজারের জন্য (Tk) দেওয়া হয়েছে
         row.innerHTML = `
             <td><b>${i}</b></td>
-            <td><input type="number" id="m-saif-${i}" placeholder="0" step="0.5" min="0"></td>
-            <td><input type="number" id="m-tanzil-${i}" placeholder="0" step="0.5" min="0"></td>
-            <td><input type="number" id="m-ismail-${i}" placeholder="0" step="0.5" min="0"></td>
-            <td><input type="number" id="bazaar-${i}" placeholder="0" min="0"></td>
+            <td><input type="number" id="m-saif-${i}" placeholder="Saif" step="0.5" min="0"></td>
+            <td><input type="number" id="m-tanzil-${i}" placeholder="Tanzil" step="0.5" min="0"></td>
+            <td><input type="number" id="m-ismail-${i}" placeholder="Ismail" step="0.5" min="0"></td>
+            <td><input type="number" id="bazaar-${i}" placeholder="TK" min="0"></td>
             <td><textarea id="desc-${i}" placeholder="বাজারের বিবরণ..."></textarea></td>
         `;
         tbody.appendChild(row);
@@ -79,7 +79,6 @@ function initTracker() {
     document.getElementById('dep-tanzil').addEventListener('change', (e) => updateDeposit('Tanzil', e.target.value));
     document.getElementById('dep-ismail').addEventListener('change', (e) => updateDeposit('Ismail', e.target.value));
 
-    // ক্লিয়ার অল বাটন
     document.getElementById('clear-all-btn').addEventListener('click', async () => {
         const firstConfirm = confirm("Are you sure to clear all monthly data?");
         if (!firstConfirm) return;
