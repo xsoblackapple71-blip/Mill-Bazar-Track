@@ -3,110 +3,631 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mess Meal Tracker</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Realtime Mess Tracker</title>
+    <style>
+        /* 🎨 প্রিমিয়াম মোবাইল-ফ্রেন্ডলি গ্লোবাল স্টাইল */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            padding: 12px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 🔒 লগইন স্ক্রিন ডিজাইন (একদম পারফেক্ট ও রেসপনসিভ) */
+        .auth-card {
+            max-width: 360px;
+            margin: 80px auto;
+            padding: 28px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+
+        .auth-card h2 {
+            margin-bottom: 24px;
+            font-size: 1.5rem;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .auth-card select, 
+        .auth-card input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            background: #fff;
+            color: #334155;
+        }
+
+        .auth-card button {
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.2s;
+        }
+
+        .auth-card button:hover {
+            background: #1d4ed8;
+        }
+
+        /* 📊 ড্যাশবোর্ড কার্ড ও গ্রিড */
+        .card {
+            background: #ffffff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e2e8f0;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+            color: #1e293b;
+            font-weight: 700;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        /* 💰 ডিপোজিট এবং সামারি টেবিল ফিক্স */
+        .standard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .standard-table th, .standard-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 15px;
+        }
+
+        .standard-table th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        /* ডিপোজিট সেকশনের কাস্টম ইনপুট (মোবাইলে চ্যাপ্টা হবে না) */
+        .deposit-input {
+            width: 120px;
+            height: 38px;
+            padding: 8px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+            text-align: right;
+        }
+
+        /* 📱 প্রধান টেবিল কন্টেইনার (মোবাইলে স্মুথ স্ক্রোল হবে) */
+        .scrollable-table {
+            width: 100%;
+            overflow-x: auto;
+            display: block;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* 🎯 মেইন টেবিল সাইজ লক */
+        .main-table {
+            width: 100%;
+            min-width: 850px; 
+            border-collapse: collapse;
+        }
+
+        .main-table th, .main-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .main-table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 700;
+        }
+
+        /* 📥 মিল ও বাজার ইনপুট ফিল্ড */
+        .main-table input[type="number"] {
+            width: 85px; 
+            height: 38px;
+            padding: 6px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .main-table input[type="number"]:focus, .main-table textarea:focus, .deposit-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* 📝 বিবরণ বক্স ফিক্স */
+        .main-table textarea {
+            width: 100%;
+            min-width: 240px; 
+            height: 60px;
+            resize: none;
+            font-family: inherit;
+            padding: 8px;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 6px;
+            box-sizing: border-box;
+            display: block;
+            outline: none;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        /* অ্যাক্টিভিটি লগ */
+        .log-box {
+            max-height: 180px;
+            overflow-y: auto;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .log-item {
+            padding: 6px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .clear-btn {
+            width: 100%;
+            background: #ef4444;
+            color: white;
+            font-weight: 700;
+            border: none;
+            padding: 12px;
+            margin-top: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .clear-btn:hover {
+            background: #dc2626;
+        }
+    </style>
 </head>
 <body>
 
-    <!-- Login Screen -->
-    <div id="login-screen" class="card auth-card">
-        <h2>🥣 Mess Tracker Login</h2>
-        <select id="login-user">
-            <option value="">Select Your Name</option>
-            <option value="Saif">Saif</option>
-            <option value="Tanzil">Tanzil</option>
-            <option value="Ismail">Ismail</option>
-        </select>
-        <input type="password" id="login-pass" placeholder="Enter PIN/Password">
-        <button id="login-btn">Login</button>
-        <p id="login-error" style="color:red; display:none;">Wrong Password!</p>
-    </div>
-
-    <!-- Main Dashboard -->
-    <div id="dashboard" class="container" style="display:none;">
-        <div class="header">
-            <h1>🥣 Realtime Mess Tracker</h1>
-            <p>Logged in as: <b id="current-user-display">---</b> | <button id="logout-btn" class="logout-btn">Logout</button></p>
+    <div class="container">
+        <div id="login-screen" class="auth-card">
+            <h2>🥣 Mess Tracker Login</h2>
+            <select id="login-user">
+                <option value="">Select Your Name</option>
+                <option value="Saif">Saif</option>
+                <option value="Tanzil">Tanzil</option>
+                <option value="Ismail">Ismail</option>
+            </select>
+            <input type="password" id="login-pass" placeholder="Enter PIN/Password">
+            <button id="login-btn">Login</button>
+            <p id="login-error" style="color:red; display:none; margin-top: 10px; font-weight: 600;">Wrong Password!</p>
         </div>
-        
-        <div class="grid">
-            <!-- Deposit Summary -->
-            <div class="card">
-                <h2>💰 Total Deposit</h2>
-                <table>
-                    <tr>
-                        <td>Saif</td>
-                        <td><input type="number" id="dep-saif" value="1500"></td>
-                    </tr>
-                    <tr>
-                        <td>Tanzil</td>
-                        <td><input type="number" id="dep-tanzil" value="1500"></td>
-                    </tr>
-                    <tr>
-                        <td>Ismail</td>
-                        <td><input type="number" id="dep-ismail" value="2000"></td>
-                    </tr>
-                    <tr style="background:#eee; font-weight:bold;">
-                        <td>Total Deposit</td>
-                        <td id="total-deposit">5000 TK</td>
-                    </tr>
-                </table>
+
+        <div id="dashboard" style="display:none;">
+            <div class="header">
+                <h1>🥣 Realtime Mess Tracker</h1>
+                <p style="font-size: 14px; font-weight: 600; color: #475569;">
+                    Logged in as: <span id="current-user-display" style="color:#0f172a;">---</span> | 
+                    <button id="logout-btn" class="logout-btn">Logout</button>
+                </p>
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <h2>💰 Total Deposit</h2>
+                    <table class="standard-table">
+                        <tr>
+                            <td>Saif</td>
+                            <td style="text-align: right;"><input type="number" id="dep-saif" class="deposit-input" value="1500"></td>
+                        </tr>
+                        <tr>
+                            <td>Tanzil</td>
+                            <td style="text-align: right;"><input type="number" id="dep-tanzil" class="deposit-input" value="1500"></td>
+                        </tr>
+                        <tr>
+                            <td>Ismail</td>
+                            <td style="text-align: right;"><input type="number" id="dep-ismail" class="deposit-input" value="2000"></td>
+                        </tr>
+                        <tr style="background:#f8fafc; font-weight:700;">
+                            <td>Total Deposit</td>
+                            <td id="total-deposit" style="text-align: right; padding-right: 20px; color: #2563eb;">0 TK</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h2>📊 Final Summary</h2>
+                    <table class="standard-table">
+                        <tr><th>Total Bazaar</th><td id="summary-bazaar" style="text-align: right; font-weight: 700;">0 TK</td></tr>
+                        <tr><th>Total Meals</th><td id="summary-meals" style="text-align: right; font-weight: 700;">0</td></tr>
+                        <tr><th>Meal Rate</th><td id="summary-rate" style="text-align: right; font-weight: 700; color: #16a34a;">0.00 TK</td></tr>
+                    </table>
+                    
+                    <h3 style="margin-top:20px; font-size: 15px; font-weight: 700; color: #334155; margin-bottom: 8px;">Individual Balance</h3>
+                    <table class="standard-table" style="font-size: 13px;">
+                        <thead>
+                            <tr style="background: #f8fafc;"><th>Name</th><th>Cost</th><th style="text-align: right;">Balance</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Saif</td><td id="cost-saif">0</td><td id="bal-saif" style="text-align: right; font-weight: 700;">0</td></tr>
+                            <tr><td>Tanzil</td><td id="cost-tanzil">0</td><td id="bal-tanzil" style="text-align: right; font-weight: 700;">0</td></tr>
+                            <tr><td>Ismail</td><td id="cost-ismail">0</td><td id="bal-ismail" style="text-align: right; font-weight: 700;">0</td></tr>
+                        </tbody>
+                    </table>
+
+                    <button id="clear-all-btn" class="clear-btn">🧹 Clear All Monthly Data</button>
+                </div>
             </div>
 
-            <!-- Final Calculations -->
+            <div class="card" style="margin-top: 20px;">
+                <h2>📅 Daily Meal & Bazaar</h2>
+                <div class="scrollable-table">
+                    <table class="main-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">Date</th>
+                                <th>Saif</th>
+                                <th>Tanzil</th>
+                                <th>Ismail</th>
+                                <th>Bazaar (TK)</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="daily-rows"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="card">
-                <h2>📊 Final Summary</h2>
-                <table>
-                    <tr><th>Total Bazaar</th><td id="summary-bazaar">0 TK</td></tr>
-                    <tr><th>Total Meals</th><td id="summary-meals">0</td></tr>
-                    <tr><th>Meal Rate</th><td id="summary-rate">0.00 TK</td></tr>
-                </table>
+                <h2>🔔 Recent Activity Log</h2>
+                <div id="activity-log" class="log-box">
+                    <p style="color:#777;">No activity yet...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, setDoc, collection, addDoc, query, orderBy, limit, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDs15CnfkHUT9W9H_Th4qHZgijzQtIUICQ",
+          authDomain: "mill-and-bazar-track.firebaseapp.com",
+          projectId: "mill-and-bazar-track",
+          storageBucket: "mill-and-bazar-track.firebasestorage.app",
+          messagingSenderId: "780292214339",
+          appId: "1:780292214339:web:4d4ca017df035393db4ef6",
+          measurementId: "G-EQSQ4ZBGKF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const USER_PASSWORDS = {
+            Saif: "1234",
+            Tanzil: "5678",
+            Ismail: "9090"
+        };
+
+        let currentUser = "";
+
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const user = document.getElementById('login-user').value;
+            const pass = document.getElementById('login-pass').value;
+
+            if (user && USER_PASSWORDS[user] === pass) {
+                currentUser = user;
+                document.getElementById('current-user-display').innerText = user;
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                initTracker();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            location.reload();
+        });
+
+        function initTracker() {
+            const tbody = document.getElementById('daily-rows');
+            tbody.innerHTML = "";
+
+            const today = new Date();
+            const currentDay = today.getDate(); 
+
+            for (let i = 1; i <= 31; i++) {
+                const row = document.createElement('tr');
                 
-                <h3 style="margin-top:15px;">Individual Balance</h3>
-                <table>
-                    <thead>
-                        <tr><th>Name</th><th>Cost</th><th>Balance</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Saif</td><td id="cost-saif">0</td><td id="bal-saif">0</td></tr>
-                        <tr><td>Tanzil</td><td id="cost-tanzil">0</td><td id="bal-tanzil">0</td></tr>
-                        <tr><td>Ismail</td><td id="cost-ismail">0</td><td id="bal-ismail">0</td></tr>
-                    </tbody>
-                </table>
+                if (i === currentDay) {
+                    row.style.backgroundColor = "#fff9c4"; 
+                    row.style.border = "2px solid #fbc02d";
+                }
 
-                <!-- ⚠️ এই যে লাল বাটনটা এখানে যোগ করা হয়েছে -->
-                <button id="clear-all-btn" style="width:100%; background:#e74c3c; color:white; font-weight:bold; border:none; padding:10px; margin-top:15px; border-radius:5px; cursor:pointer;">🧹 Clear All Monthly Data</button>
-            </div>
-        </div>
+                row.innerHTML = `
+                    <td><b>${i}</b></td>
+                    <td><input type="number" id="m-saif-${i}" placeholder="Saif" step="0.5" min="0"></td>
+                    <td><input type="number" id="m-tanzil-${i}" placeholder="Tanzil" step="0.5" min="0"></td>
+                    <td><input type="number" id="m-ismail-${i}" placeholder="Ismail" step="0.5" min="0"></td>
+                    <td><input type="number" id="bazaar-${i}" placeholder="TK" min="0"></td>
+                    <td><textarea id="desc-${i}" placeholder="বাজারের বিবরণ..."></textarea></td>
+                `;
+                tbody.appendChild(row);
 
-        <!-- Daily Tracker -->
-        <div class="card scrollable-table">
-            <h2>📅 Daily Meal & Bazaar</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Saif</th>
-                        <th>Tanzil</th>
-                        <th>Ismail</th>
-                        <th>Bazaar (TK)</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody id="daily-rows"></tbody>
-            </table>
-        </div>
+                document.getElementById(`m-saif-${i}`).addEventListener('change', (e) => updateData(i, 'Saif (Meal)', e.target.value));
+                document.getElementById(`m-tanzil-${i}`).addEventListener('change', (e) => updateData(i, 'Tanzil (Meal)', e.target.value));
+                document.getElementById(`m-ismail-${i}`).addEventListener('change', (e) => updateData(i, 'Ismail (Meal)', e.target.value));
+                document.getElementById(`bazaar-${i}`).addEventListener('change', (e) => updateData(i, 'Bazaar Cost', e.target.value));
+                document.getElementById(`desc-${i}`).addEventListener('change', (e) => updateData(i, 'Description', e.target.value));
+            }
 
-        <!-- Activity Log -->
-        <div class="card log-card">
-            <h2>🔔 Recent Activity Log (কে কোথায় চেঞ্জ করল)</h2>
-            <div id="activity-log" class="log-box">
-                <p style="color:#777;">No activity yet...</p>
-            </div>
-        </div>
-    </div>
+            document.getElementById('dep-saif').addEventListener('change', (e) => updateDeposit('Saif', e.target.value));
+            document.getElementById('dep-tanzil').addEventListener('change', (e) => updateDeposit('Tanzil', e.target.value));
+            document.getElementById('dep-ismail').addEventListener('change', (e) => updateDeposit('Ismail', e.target.value));
 
-    <!-- Firebase SDK Links -->
-    <script type="module" src="app.js"></script>
+            document.getElementById('clear-all-btn').addEventListener('click', async () => {
+                const firstConfirm = confirm("Are you sure to clear all monthly data?");
+                if (!firstConfirm) return;
+
+                const enteredPin = prompt("Security Check: Enter your PIN/Password to clear data:");
+                if (!enteredPin) return;
+
+                if (USER_PASSWORDS[currentUser] === enteredPin) {
+                    try {
+                        await deleteDoc(doc(db, "mess", "month_data"));
+                        const now = new Date();
+                        const dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        await addDoc(collection(db, "logs"), {
+                            user: currentUser,
+                            action: `🧹 CLEARED all monthly data and reset the tracker!`,
+                            time: `${dateStr}, ${timeStr}`,
+                            timestamp: new Date()
+                        });
+                        alert("All data cleared successfully!");
+                    } catch (error) {
+                        alert("Error clearing data: " + error.message);
+                    }
+                } else {
+                    alert("Wrong PIN! Data was not cleared.");
+                }
+            });
+
+            onSnapshot(doc(db, "mess", "month_data"), (docSnap) => {
+                let data = {};
+                if (docSnap.exists()) {
+                    data = docSnap.data();
+                }
+                calculateAndRender(data);
+            });
+
+            const logQuery = query(collection(db, "logs"), orderBy("timestamp", "desc"), limit(10));
+            onSnapshot(logQuery, (querySnapshot) => {
+                const logBox = document.getElementById('activity-log');
+                logBox.innerHTML = "";
+                querySnapshot.forEach((doc) => {
+                    const log = doc.data();
+                    const p = document.createElement('p');
+                    p.className = "log-item";
+                    p.innerHTML = `<b>${log.time || ''}</b> - 👤 <b>${log.user}</b> ${log.action}`;
+                    logBox.appendChild(p);
+                });
+            });
+        }
+
+        async function updateData(day, field, value) {
+            const docRef = doc(db, "mess", "month_data");
+            let formattedValue = field === 'Description' ? value : parseFloat(value) || 0;
+
+            await setDoc(docRef, {
+                [`day_${day}`]: {
+                    [field.replace(/[^a-zA-Z0-9]/g, "_")]: formattedValue
+                }
+            }, { merge: true });
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const fullDateTime = `${dateStr}, ${timeStr}`;
+
+            await addDoc(collection(db, "logs"), {
+                user: currentUser,
+                action: `changed Day ${day} ${field} to "${value}"`,
+                time: fullDateTime,
+                timestamp: new Date()
+            });
+        }
+
+        async function updateDeposit(name, value) {
+            const docRef = doc(db, "mess", "month_data");
+            const parseFloatValue = parseFloat(value) || 0;
+
+            await setDoc(docRef, {
+                deposits: {
+                    [name]: parseFloatValue
+                }
+            }, { merge: true });
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const fullDateTime = `${dateStr}, ${timeStr}`;
+
+            await addDoc(collection(db, "logs"), {
+                user: currentUser,
+                action: `updated ${name}'s deposit to ${parseFloatValue} TK`,
+                time: fullDateTime,
+                timestamp: new Date()
+            });
+        }
+
+        function calculateAndRender(data) {
+            let totalBazaar = 0, mealsSaif = 0, mealsTanzil = 0, mealsIsmail = 0;
+
+            for (let i = 1; i <= 31; i++) {
+                const dayData = data[`day_${i}`] || {};
+                const sMeal = dayData['Saif__Meal_'] !== undefined ? dayData['Saif__Meal_'] : 0;
+                const tMeal = dayData['Tanzil__Meal_'] !== undefined ? dayData['Tanzil__Meal_'] : 0;
+                const iMeal = dayData['Ismail__Meal_'] !== undefined ? dayData['Ismail__Meal_'] : 0;
+                const bCost = dayData['Bazaar_Cost'] !== undefined ? dayData['Bazaar_Cost'] : 0;
+                const desc = dayData['Description'] || "";
+
+                const inputSaif = document.getElementById(`m-saif-${i}`);
+                const inputTanzil = document.getElementById(`m-tanzil-${i}`);
+                const inputIsmail = document.getElementById(`m-ismail-${i}`);
+                const inputBazaar = document.getElementById(`bazaar-${i}`);
+                const inputDesc = document.getElementById(`desc-${i}`);
+
+                if(inputSaif && document.activeElement !== inputSaif) {
+                    inputSaif.value = sMeal === 0 ? "" : sMeal;
+                    inputSaif.style.backgroundColor = sMeal > 0 ? "#d4edda" : ""; 
+                    inputSaif.style.color = sMeal > 0 ? "#155724" : "";
+                    inputSaif.style.fontWeight = sMeal > 0 ? "bold" : "";
+                }
+                if(inputTanzil && document.activeElement !== inputTanzil) {
+                    inputTanzil.value = tMeal === 0 ? "" : tMeal;
+                    inputTanzil.style.backgroundColor = tMeal > 0 ? "#d4edda" : ""; 
+                    inputTanzil.style.color = tMeal > 0 ? "#155724" : "";
+                    inputTanzil.style.fontWeight = tMeal > 0 ? "bold" : "";
+                }
+                if(inputIsmail && document.activeElement !== inputIsmail) {
+                    inputIsmail.value = iMeal === 0 ? "" : iMeal;
+                    inputIsmail.style.backgroundColor = iMeal > 0 ? "#d4edda" : ""; 
+                    inputIsmail.style.color = iMeal > 0 ? "#155724" : "";
+                    inputIsmail.style.fontWeight = iMeal > 0 ? "bold" : "";
+                }
+                if(inputBazaar && document.activeElement !== inputBazaar) {
+                    inputBazaar.value = bCost === 0 ? "" : bCost;
+                    inputBazaar.style.backgroundColor = bCost > 0 ? "#f8d7da" : ""; 
+                    inputBazaar.style.color = bCost > 0 ? "#721c24" : "";
+                    inputBazaar.style.fontWeight = bCost > 0 ? "bold" : "";
+                }
+                if(inputDesc && document.activeElement !== inputDesc) {
+                    inputDesc.value = desc;
+                }
+
+                mealsSaif += sMeal;
+                mealsTanzil += tMeal;
+                mealsIsmail += iMeal;
+                totalBazaar += bCost;
+            }
+
+            const totalMeals = mealsSaif + mealsTanzil + mealsIsmail;
+            const mealRate = totalMeals > 0 ? totalBazaar / totalMeals : 0;
+
+            document.getElementById('summary-bazaar').innerText = totalBazaar + " TK";
+            document.getElementById('summary-meals').innerText = totalMeals;
+            document.getElementById('summary-rate').innerText = mealRate.toFixed(2) + " TK";
+
+            const costSaif = mealsSaif * mealRate;
+            const costTanzil = mealsTanzil * mealRate;
+            const costIsmail = mealsIsmail * mealRate;
+
+            document.getElementById('cost-saif').innerHTML = `<b>${mealsSaif}</b> <span style="font-size:12px;color:#666;">meals</span><br>${costSaif.toFixed(2)} TK`;
+            document.getElementById('cost-tanzil').innerHTML = `<b>${mealsTanzil}</b> <span style="font-size:12px;color:#666;">meals</span><br>${costTanzil.toFixed(2)} TK`;
+            document.getElementById('cost-ismail').innerHTML = `<b>${mealsIsmail}</b> <span style="font-size:12px;color:#666;">meals</span><br>${costIsmail.toFixed(2)} TK`;
+
+            const currentDeposits = data.deposits || {};
+            const depSaif = currentDeposits['Saif'] !== undefined ? currentDeposits['Saif'] : 1500;
+            const depTanzil = currentDeposits['Tanzil'] !== undefined ? currentDeposits['Tanzil'] : 1500;
+            const depIsmail = currentDeposits['Ismail'] !== undefined ? currentDeposits['Ismail'] : 2000;
+
+            if(document.getElementById('dep-saif') && document.activeElement !== document.getElementById('dep-saif')) document.getElementById('dep-saif').value = depSaif;
+            if(document.getElementById('dep-tanzil') && document.activeElement !== document.getElementById('dep-tanzil')) document.getElementById('dep-tanzil').value = depTanzil;
+            if(document.getElementById('dep-ismail') && document.activeElement !== document.getElementById('dep-ismail')) document.getElementById('dep-ismail').value = depIsmail;
+            
+            const totalDeposit = depSaif + depTanzil + depIsmail;
+            document.getElementById('total-deposit').innerText = totalDeposit + " TK";
+
+            formatCell('bal-saif', depSaif - costSaif);
+            formatCell('bal-tanzil', depTanzil - costTanzil);
+            formatCell('bal-ismail', depIsmail - costIsmail);
+        }
+
+        function formatCell(id, val) {
+            const el = document.getElementById(id);
+            if(val >= 0) {
+                el.innerText = `+${val.toFixed(2)} (Refund)`;
+                el.style.color = "green";
+            } else {
+                el.innerText = `${val.toFixed(2)} (Due)`;
+                el.style.color = "red";
+            }
+        }
+    </script>
 </body>
 </html>
