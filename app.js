@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, onSnapshot, setDoc, collection, addDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// তোর ফায়ারবেস কনফিগারেশন এখানে বসিয়ে দেওয়া হয়েছে
 const firebaseConfig = {
   apiKey: "AIzaSyDs15CnfkHUT9W9H_Th4qHZgijzQtIUICQ",
   authDomain: "mill-and-bazar-track.firebaseapp.com",
@@ -15,7 +14,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ৩ জনের পাসওয়ার্ড/পিন 
 const USER_PASSWORDS = {
     Saif: "1234",
     Tanzil: "5678",
@@ -24,8 +22,8 @@ const USER_PASSWORDS = {
 
 let currentUser = "";
 
-// লগইন ফাংশন
-window.login = function() {
+// বাটন ইভেন্ট লিসেনার (HTML এর অন-ক্লিক ঝামেলা এড়ানোর জন্য)
+document.getElementById('login-btn').addEventListener('click', () => {
     const user = document.getElementById('login-user').value;
     const pass = document.getElementById('login-pass').value;
 
@@ -38,31 +36,41 @@ window.login = function() {
     } else {
         document.getElementById('login-error').style.display = 'block';
     }
-}
+});
 
-window.logout = function() {
+document.getElementById('logout-btn').addEventListener('click', () => {
     location.reload();
-}
+});
 
 function initTracker() {
     const tbody = document.getElementById('daily-rows');
     tbody.innerHTML = "";
 
-    // ৩১ দিনের রো তৈরি করা
     for (let i = 1; i <= 31; i++) {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td><b>Day ${i}</b></td>
-            <td><input type="number" id="m-saif-${i}" value="0" step="0.5" min="0" onchange="updateData(${i}, 'Saif (Meal)', this.value)"></td>
-            <td><input type="number" id="m-tanzil-${i}" value="0" step="0.5" min="0" onchange="updateData(${i}, 'Tanzil (Meal)', this.value)"></td>
-            <td><input type="number" id="m-ismail-${i}" value="0" step="0.5" min="0" onchange="updateData(${i}, 'Ismail (Meal)', this.value)"></td>
-            <td><input type="number" id="bazaar-${i}" value="0" min="0" onchange="updateData(${i}, 'Bazaar Cost', this.value)"></td>
-            <td><input type="text" id="desc-${i}" placeholder="বিবরণ" onchange="updateData(${i}, 'Description', this.value)"></td>
+            <td><input type="number" id="m-saif-${i}" value="0" step="0.5" min="0"></td>
+            <td><input type="number" id="m-tanzil-${i}" value="0" step="0.5" min="0"></td>
+            <td><input type="number" id="m-ismail-${i}" value="0" step="0.5" min="0"></td>
+            <td><input type="number" id="bazaar-${i}" value="0" min="0"></td>
+            <td><input type="text" id="desc-${i}" placeholder="বিবরণ"></td>
         `;
         tbody.appendChild(row);
+
+        // ইনপুট বক্সের ইভেন্ট লিসেনার যোগ করা
+        document.getElementById(`m-saif-${i}`).addEventListener('change', (e) => updateData(i, 'Saif (Meal)', e.target.value));
+        document.getElementById(`m-tanzil-${i}`).addEventListener('change', (e) => updateData(i, 'Tanzil (Meal)', e.target.value));
+        document.getElementById(`m-ismail-${i}`).addEventListener('change', (e) => updateData(i, 'Ismail (Meal)', e.target.value));
+        document.getElementById(`bazaar-${i}`).addEventListener('change', (e) => updateData(i, 'Bazaar Cost', e.target.value));
+        document.getElementById(`desc-${i}`).addEventListener('change', (e) => updateData(i, 'Description', e.target.value));
     }
 
-    // ফায়ারবেস থেকে রিয়েল-টাইমে ডাটা লোড ও সিঙ্ক করা
+    // জমার ইনপুট বক্সের ইভেন্ট লিসেনার যোগ করা
+    document.getElementById('dep-saif').addEventListener('change', (e) => updateDeposit('Saif', e.target.value));
+    document.getElementById('dep-tanzil').addEventListener('change', (e) => updateDeposit('Tanzil', e.target.value));
+    document.getElementById('dep-ismail').addEventListener('change', (e) => updateDeposit('Ismail', e.target.value));
+
     onSnapshot(doc(db, "mess", "month_data"), (docSnap) => {
         let data = {};
         if (docSnap.exists()) {
@@ -71,7 +79,6 @@ function initTracker() {
         calculateAndRender(data);
     });
 
-    // অ্যাক্টিভিটি লগ রিয়েল-টাইমে দেখা
     const logQuery = query(collection(db, "logs"), orderBy("timestamp", "desc"), limit(10));
     onSnapshot(logQuery, (querySnapshot) => {
         const logBox = document.getElementById('activity-log');
@@ -86,10 +93,8 @@ function initTracker() {
     });
 }
 
-// ডাটা আপডেট হলে ফায়ারবেসে সেভ হবে এবং লগ তৈরি হবে
-window.updateData = async function(day, field, value) {
+async function updateData(day, field, value) {
     const docRef = doc(db, "mess", "month_data");
-    
     let formattedValue = field === 'Description' ? value : parseFloat(value) || 0;
 
     await setDoc(docRef, {
@@ -98,7 +103,6 @@ window.updateData = async function(day, field, value) {
         }
     }, { merge: true });
 
-    // লগ ডেটা তৈরি
     const now = new Date();
     const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -110,19 +114,16 @@ window.updateData = async function(day, field, value) {
     });
 }
 
-// জমার টাকা আপডেট করার ফাংশন
-window.updateDeposit = async function(name, value) {
+async function updateDeposit(name, value) {
     const docRef = doc(db, "mess", "month_data");
     const parseFloatValue = parseFloat(value) || 0;
 
-    // ফায়ারবেসে জমার পরিমাণ সেভ হবে
     await setDoc(docRef, {
         deposits: {
             [name]: parseFloatValue
         }
     }, { merge: true });
 
-    // অ্যাক্টিভিটি লগে পুশ হবে
     const now = new Date();
     const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     await addDoc(collection(db, "logs"), {
@@ -133,7 +134,6 @@ window.updateDeposit = async function(name, value) {
     });
 }
 
-// ক্যালকুলেশন ও রেন্ডার ফাংশন
 function calculateAndRender(data) {
     let totalBazaar = 0, mealsSaif = 0, mealsTanzil = 0, mealsIsmail = 0;
 

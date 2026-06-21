@@ -8,6 +8,7 @@
 </head>
 <body>
 
+    <!-- Login Screen -->
     <div id="login-screen" class="card auth-card">
         <h2>🥣 Mess Tracker Login</h2>
         <select id="login-user">
@@ -17,31 +18,33 @@
             <option value="Ismail">Ismail</option>
         </select>
         <input type="password" id="login-pass" placeholder="Enter PIN/Password">
-        <button onclick="login()">Login</button>
+        <button id="login-btn">Login</button>
         <p id="login-error" style="color:red; display:none;">Wrong Password!</p>
     </div>
 
+    <!-- Main Dashboard -->
     <div id="dashboard" class="container" style="display:none;">
         <div class="header">
             <h1>🥣 Realtime Mess Tracker</h1>
-            <p>Logged in as: <b id="current-user-display">---</b> | <button onclick="logout()" class="logout-btn">Logout</button></p>
+            <p>Logged in as: <b id="current-user-display">---</b> | <button id="logout-btn" class="logout-btn">Logout</button></p>
         </div>
         
         <div class="grid">
+            <!-- Deposit Summary -->
             <div class="card">
                 <h2>💰 Total Deposit</h2>
                 <table>
                     <tr>
                         <td>Saif</td>
-                        <td><input type="number" id="dep-saif" value="1500" onchange="updateDeposit('Saif', this.value)"></td>
+                        <td><input type="number" id="dep-saif" value="1500"></td>
                     </tr>
                     <tr>
                         <td>Tanzil</td>
-                        <td><input type="number" id="dep-tanzil" value="1500" onchange="updateDeposit('Tanzil', this.value)"></td>
+                        <td><input type="number" id="dep-tanzil" value="1500"></td>
                     </tr>
                     <tr>
                         <td>Ismail</td>
-                        <td><input type="number" id="dep-ismail" value="2000" onchange="updateDeposit('Ismail', this.value)"></td>
+                        <td><input type="number" id="dep-ismail" value="2000"></td>
                     </tr>
                     <tr style="background:#eee; font-weight:bold;">
                         <td>Total Deposit</td>
@@ -50,6 +53,7 @@
                 </table>
             </div>
 
+            <!-- Final Calculations -->
             <div class="card">
                 <h2>📊 Final Summary</h2>
                 <table>
@@ -71,3 +75,35 @@
                 </table>
             </div>
         </div>
+
+        <!-- Daily Tracker -->
+        <div class="card scrollable-table">
+            <h2>📅 Daily Meal & Bazaar</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Saif</th>
+                        <th>Tanzil</th>
+                        <th>Ismail</th>
+                        <th>Bazaar (TK)</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="daily-rows"></tbody>
+            </table>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="card log-card">
+            <h2>🔔 Recent Activity Log (কে কোথায় চেঞ্জ করল)</h2>
+            <div id="activity-log" class="log-box">
+                <p style="color:#777;">No activity yet...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK Links -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
