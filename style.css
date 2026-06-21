@@ -35,29 +35,6 @@ h2 {
     padding-bottom: 5px;
 }
 
-/* অথ স্ক্রিন স্টাইল */
-.auth-card {
-    max-width: 400px;
-    margin: 100px auto;
-    text-align: center;
-}
-
-.auth-card select, .auth-card input, .auth-card button {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    border: 1px solid #cbd5e1;
-}
-
-.auth-card button {
-    background: #2563eb;
-    color: white;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-}
-
 /* ড্যাশবোর্ড গ্রিড */
 .grid {
     display: grid;
@@ -66,44 +43,49 @@ h2 {
     margin-top: 15px;
 }
 
-/* টেবিল ডিজাইন (ফিক্সড ও অ্যালাইনড) */
+/* 📱 মোবাইল স্ক্রোল কন্টেইনার (এইটা টেবিলটাকে চ্যাপ্টা হওয়া থেকে বাঁচাবে) */
+.scrollable-table {
+    width: 100%;
+    overflow-x: auto; /* ডান-বামে স্ক্রোলের অনুমতি */
+    display: block;
+}
+
+/* 🎯 টেবিল ডিজাইন ফিক্স */
 table {
     width: 100%;
+    min-width: 650px; /* টেবিল জোর করে অন্তত এতটুকু চওড়া থাকবেই, ফলে মোবাইলেও কাটবে না */
     border-collapse: collapse;
     margin-top: 10px;
 }
 
 th, td {
-    padding: 8px 6px;
+    padding: 10px 6px;
     text-align: center;
     border: 1px solid #e2e8f0;
     font-size: 14px;
-    vertical-align: middle; /* সব লেখা এবং ইনপুট মাঝখানে সোজা রাখার জন্য */
+    vertical-align: middle;
 }
 
 th {
     background-color: #f8fafc;
     color: #475569;
     font-weight: 600;
-    white-space: nowrap; /* নাম যাতে কেটে ভেঙে নিচে না যায় */
 }
 
 /* ইনপুট ফিল্ড স্টাইল */
 input[type="number"] {
     width: 100%;
-    max-width: 70px; /* মিল এবং বাজারের বক্সের সাইজ নির্দিষ্ট করা হলো */
-    padding: 6px;
+    padding: 8px 4px;
     border: 1px solid #cbd5e1;
     border-radius: 4px;
     text-align: center;
     font-size: 14px;
 }
 
-/* বিবরণ (Description) বক্স ফিক্স */
+/* 📝 বিবরণ (Description) বক্স একদম পারফেক্ট সাইজ */
 textarea {
     width: 100%;
-    min-width: 180px; /* মোবাইলেও যাতে বক্সটি যথেষ্ট চওড়া ও বড় থাকে */
-    height: 70px;    /* উচ্চতা বাড়িয়ে বড় করা হলো */
+    height: 60px;
     resize: none;
     font-family: inherit;
     padding: 6px;
@@ -111,13 +93,6 @@ textarea {
     border-radius: 4px;
     box-sizing: border-box;
     display: block;
-    margin: 0 auto;
-}
-
-/* মোবাইল স্ক্রিনে টেবিল স্ক্রোল করার সুবিধা */
-.scrollable-table {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
 }
 
 /* অ্যাক্টিভিটি লগ */
