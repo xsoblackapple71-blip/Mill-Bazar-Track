@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, doc, onSnapshot, setDoc, collection, addDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot, setDoc, collection, addDoc, query, orderBy, limit, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDs15CnfkHUT9W9H_Th4qHZgijzQtIUICQ",
@@ -46,15 +46,12 @@ function initTracker() {
     const tbody = document.getElementById('daily-rows');
     tbody.innerHTML = "";
 
-    // আজকের আসল তারিখ বের করা
     const today = new Date();
     const currentDay = today.getDate(); 
 
-    // ৩১ দিনের রো তৈরি করা (বিবরণ বক্স স্থায়ীভাবে বড় ও ফিক্সড করা হলো)
     for (let i = 1; i <= 31; i++) {
         const row = document.createElement('tr');
         
-        // আজকে যে তারিখ, সেই রো-টাকে হাইলাইট করা
         if (i === currentDay) {
             row.style.backgroundColor = "#fff9c4"; 
             row.style.border = "2px solid #fbc02d";
@@ -80,6 +77,40 @@ function initTracker() {
     document.getElementById('dep-saif').addEventListener('change', (e) => updateDeposit('Saif', e.target.value));
     document.getElementById('dep-tanzil').addEventListener('change', (e) => updateDeposit('Tanzil', e.target.value));
     document.getElementById('dep-ismail').addEventListener('change', (e) => updateDeposit('Ismail', e.target.value));
+
+    // 🧹 ক্লিয়ার অল বাটন লজিক (কনফার্মেশন + পিন ভেরিফিকেশন সহ)
+    document.getElementById('clear-all-btn').addEventListener('click', async () => {
+        const firstConfirm = confirm("Are you sure to clear all monthly data?");
+        if (!firstConfirm) return;
+
+        const enteredPin = prompt("Security Check: Enter your PIN/Password to clear data:");
+        if (!enteredPin) return;
+
+        // যে লগইন করে আছে, তার পিনের সাথে মিললেই কেবল ডিলিট হবে
+        if (USER_PASSWORDS[currentUser] === enteredPin) {
+            try {
+                // ১ ক্লিকে ফায়ারবেস থেকে ৩১ দিনের সব ডাটা ডিলিট করা
+                await deleteDoc(doc(db, "mess", "month_data"));
+                
+                // লগে ডাটা সেভ করা যে কে ডিলিট করল
+                const now = new Date();
+                const dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+                const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                await addDoc(collection(db, "logs"), {
+                    user: currentUser,
+                    action: `🧹 CLEARED all monthly data and reset the tracker!`,
+                    time: `${dateStr}, ${timeStr}`,
+                    timestamp: new Date()
+                });
+
+                alert("All data cleared successfully!");
+            } catch (error) {
+                alert("Error clearing data: " + error.message);
+            }
+        } else {
+            alert("Wrong PIN! Data was not cleared.");
+        }
+    });
 
     onSnapshot(doc(db, "mess", "month_data"), (docSnap) => {
         let data = {};
