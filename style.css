@@ -1,0 +1,92 @@
+:root {
+    --primary: #2c3e50;
+    --secondary: #18bc9c;
+    --background: #eef2f3;
+    --card-bg: #ffffff;
+}
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: var(--background);
+    margin: 0;
+    padding: 10px;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+.card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.auth-card {
+    max-width: 320px;
+    margin: 100px auto;
+    text-align: center;
+}
+.auth-card select, .auth-card input, .auth-card button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+.auth-card button {
+    background: var(--secondary);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #e2e8f0;
+    padding: 8px;
+    text-align: center;
+}
+th { background: var(--primary); color: white; }
+input[type="number"], input[type="text"] {
+    width: 85%;
+    padding: 5px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    text-align: center;
+}
+.scrollable-table {
+    overflow-x: auto;
+}
+.log-box {
+    max-height: 150px;
+    overflow-y: auto;
+    background: #f8fafc;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: left;
+    font-size: 14px;
+}
+.log-item {
+    border-bottom: 1px solid #e2e8f0;
+    padding: 5px 0;
+}
+.logout-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}

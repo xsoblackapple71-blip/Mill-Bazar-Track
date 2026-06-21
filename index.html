@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mess Meal Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="card auth-card">
+        <h2>🥣 Mess Tracker Login</h2>
+        <select id="login-user">
+            <option value="">Select Your Name</option>
+            <option value="Saif">Saif</option>
+            <option value="Tanzil">Tanzil</option>
+            <option value="Ismail">Ismail</option>
+        </select>
+        <input type="password" id="login-pass" placeholder="Enter PIN/Password">
+        <button onclick="login()">Login</button>
+        <p id="login-error" style="color:red; display:none;">Wrong Password!</p>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="container" style="display:none;">
+        <div class="header">
+            <h1>🥣 Realtime Mess Tracker</h1>
+            <p>Logged in as: <b id="current-user-display">---</b> | <button onclick="logout()" class="logout-btn">Logout</button></p>
+        </div>
+        
+        <div class="grid">
+            <!-- Deposit Summary -->
+            <div class="card">
+                <h2>💰 Fixed Deposit</h2>
+                <table>
+                    <tr><td>Saif</td><td><b>1500 TK</b></td></tr>
+                    <tr><td>Tanzil</td><td><b>1500 TK</b></td></tr>
+                    <tr><td>Ismail</td><td><b>2000 TK</b></td></tr>
+                    <tr style="background:#eee; font-weight:bold;"><td>Total Deposit</td><td>5000 TK</td></tr>
+                </table>
+            </div>
+
+            <!-- Final Calculations -->
+            <div class="card">
+                <h2>📊 Final Summary</h2>
+                <table>
+                    <tr><th>Total Bazaar</th><td id="summary-bazaar">0 TK</td></tr>
+                    <tr><th>Total Meals</th><td id="summary-meals">0</td></tr>
+                    <tr><th>Meal Rate</th><td id="summary-rate">0.00 TK</td></tr>
+                </table>
+                
+                <h3 style="margin-top:15px;">Individual Balance</h3>
+                <table>
+                    <thead>
+                        <tr><th>Name</th><th>Cost</th><th>Balance</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Saif</td><td id="cost-saif">0</td><td id="bal-saif">0</td></tr>
+                        <tr><td>Tanzil</td><td id="cost-tanzil">0</td><td id="bal-tanzil">0</td></tr>
+                        <tr><td>Ismail</td><td id="cost-ismail">0</td><td id="bal-ismail">0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Daily Tracker -->
+        <div class="card scrollable-table">
+            <h2>📅 Daily Meal & Bazaar</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Saif</th>
+                        <th>Tanzil</th>
+                        <th>Ismail</th>
+                        <th>Bazaar (TK)</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="daily-rows"></tbody>
+            </table>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="card log-card">
+            <h2>🔔 Recent Activity Log (কে কোথায় চেঞ্জ করল)</h2>
+            <div id="activity-log" class="log-box">
+                <p style="color:#777;">No activity yet...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK Links -->
+    <script type="module" src="app.js"></script>
+</body>
+</html>
