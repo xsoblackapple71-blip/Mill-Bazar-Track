@@ -57,13 +57,14 @@ function initTracker() {
             row.style.border = "2px solid #fbc02d";
         }
 
+        // 🎯 এখানে placeholder থেকে নাম মুছে শুধু '0' করা হলো, যাতে বক্স চ্যাপ্টা না হয়
         row.innerHTML = `
             <td><b>${i}</b></td>
-            <td><input type="number" id="m-saif-${i}" placeholder="Saif" step="0.5" min="0"></td>
-            <td><input type="number" id="m-tanzil-${i}" placeholder="Tanzil" step="0.5" min="0"></td>
-            <td><input type="number" id="m-ismail-${i}" placeholder="Ismail" step="0.5" min="0"></td>
-            <td><input type="number" id="bazaar-${i}" placeholder="Bazaar" min="0"></td>
-            <td><textarea id="desc-${i}" placeholder="বিবরণ..." style="width: 95%; height: 60px; resize: none; font-family: inherit; padding: 6px; border: 1px solid #cbd5e1; border-radius: 4px; box-sizing: border-box;"></textarea></td>
+            <td><input type="number" id="m-saif-${i}" placeholder="0" step="0.5" min="0"></td>
+            <td><input type="number" id="m-tanzil-${i}" placeholder="0" step="0.5" min="0"></td>
+            <td><input type="number" id="m-ismail-${i}" placeholder="0" step="0.5" min="0"></td>
+            <td><input type="number" id="bazaar-${i}" placeholder="0" min="0"></td>
+            <td><textarea id="desc-${i}" placeholder="বাজারের বিবরণ..."></textarea></td>
         `;
         tbody.appendChild(row);
 
@@ -78,7 +79,7 @@ function initTracker() {
     document.getElementById('dep-tanzil').addEventListener('change', (e) => updateDeposit('Tanzil', e.target.value));
     document.getElementById('dep-ismail').addEventListener('change', (e) => updateDeposit('Ismail', e.target.value));
 
-    // 🧹 ক্লিয়ার অল বাটন লজিক (কনফার্মেশন + পিন ভেরিফিকেশন সহ)
+    // ক্লিয়ার অল বাটন
     document.getElementById('clear-all-btn').addEventListener('click', async () => {
         const firstConfirm = confirm("Are you sure to clear all monthly data?");
         if (!firstConfirm) return;
@@ -86,13 +87,9 @@ function initTracker() {
         const enteredPin = prompt("Security Check: Enter your PIN/Password to clear data:");
         if (!enteredPin) return;
 
-        // যে লগইন করে আছে, তার পিনের সাথে মিললেই কেবল ডিলিট হবে
         if (USER_PASSWORDS[currentUser] === enteredPin) {
             try {
-                // ১ ক্লিকে ফায়ারবেস থেকে ৩১ দিনের সব ডাটা ডিলিট করা
                 await deleteDoc(doc(db, "mess", "month_data"));
-                
-                // লগে ডাটা সেভ করা যে কে ডিলিট করল
                 const now = new Date();
                 const dateStr = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
                 const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -102,7 +99,6 @@ function initTracker() {
                     time: `${dateStr}, ${timeStr}`,
                     timestamp: new Date()
                 });
-
                 alert("All data cleared successfully!");
             } catch (error) {
                 alert("Error clearing data: " + error.message);
